@@ -10,7 +10,7 @@ using TechSolution.Business.Models;
 namespace TechSolution.API.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("api/v{version: apiVersion}/questions")]
+    [Route("api/v{version:apiVersion}/questions")]
     public class QuestionController : MainController
     {
         private readonly IMapper _mapper;
@@ -54,8 +54,7 @@ namespace TechSolution.API.Controllers
             return CustomResponse(questionViewModel);
         }
 
-        [Route("update")]
-        [HttpPut("{id:guid}")]
+        [HttpPut("update/{id:guid}")]
         public async Task<ActionResult<QuestionViewModel>> Put(Guid id, QuestionViewModel questionViewModel)
         {
             if (id != questionViewModel.Id)
@@ -71,8 +70,7 @@ namespace TechSolution.API.Controllers
             return CustomResponse(questionViewModel);
         }
 
-        [Route("remove")]
-        [HttpDelete("{id:guid}")]
+        [HttpDelete("remove/{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var questionViewModel = await _questionRepository.GetById(id);

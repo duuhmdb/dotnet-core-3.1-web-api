@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using TechSolution.API.Extensions;
 using TechSolution.Business.Interfaces;
 using TechSolution.Business.Notifications;
 using TechSolution.Business.Services;
@@ -17,6 +20,8 @@ namespace TechSolution.API.Configuration
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IAnswerRepository, AnswerRepository>();
             services.AddScoped<IQuestionService, QuestionService>();
+
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerOptionsConfig>();
             return services;
         }
     }
