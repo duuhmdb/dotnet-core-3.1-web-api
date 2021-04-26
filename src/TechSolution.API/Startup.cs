@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TechSolution.API.Configuration;
 using TechSolution.API.Extensions;
+using TechSolution.API.Identity;
 using TechSolution.Data.Context;
 
 namespace TechSolution.API
@@ -30,29 +30,17 @@ namespace TechSolution.API
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
+        { 
             services.ResolveDependencies();
 
-            services.AddDbContext<TechSolutionDbContext>(options => 
+            services.AddDbContext<TechSolutionDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.Configure<ApiBehaviorOptions>(options =>
-                    options.SuppressModelStateInvalidFilter = true);
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddApiVersioning(options =>
-            {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ReportApiVersions = true;
-            });
-
-            services.AddVersionedApiExplorer(options =>
-            {
-                options.GroupNameFormat = "'v'VVV";
-                options.SubstituteApiVersionInUrl = true;
-            });
-
+            services.AddApiConfiguration();
+            services.AddIdentityConfiguration(Configuration);
             services.AddSwaggerConfig();
         }
 
@@ -68,6 +56,8 @@ namespace TechSolution.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

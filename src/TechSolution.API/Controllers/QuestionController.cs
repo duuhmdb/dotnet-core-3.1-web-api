@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace TechSolution.API.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/questions")]
+    [Authorize]
     public class QuestionController : MainController
     {
         private readonly IMapper _mapper;
@@ -27,7 +29,7 @@ namespace TechSolution.API.Controllers
             _questionService = questionService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IEnumerable<QuestionViewModel>> Get()
         {
             var questions = _mapper.Map<IEnumerable<Question>, IEnumerable<QuestionViewModel>>(await _questionRepository.GetAll());
@@ -35,13 +37,13 @@ namespace TechSolution.API.Controllers
             return questions;
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("question/{id:guid}")]
         public async Task<QuestionViewModel> Get(Guid id)
         {
             return _mapper.Map<Question, QuestionViewModel>(await _questionRepository.GetById(id));
         }
 
-        [Route("create")]
+        [Route("new")]
         [HttpPost]
         public async Task<ActionResult<QuestionViewModel>> Post(QuestionViewModel questionViewModel)
         {
