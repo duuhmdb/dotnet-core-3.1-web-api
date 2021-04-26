@@ -9,11 +9,14 @@ namespace TechSolution.Business.Services
     public class QuestionService : BaseService, IQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IUserService _userService;
 
         public QuestionService(IQuestionRepository questionRepository,
+                               IUserService userService,
                                INotificator notificator) : base(notificator)
         {
             _questionRepository = questionRepository;
+            _userService = userService;
         }
 
         public async Task CreateQuestion(Question question)
@@ -25,6 +28,12 @@ namespace TechSolution.Business.Services
             if (existsQuestion.Any())
             {
                 Notify("There is already an question similar to this");
+                return;
+            }
+
+            if(_userService.GetUserId() != question.UserId)
+            {
+                Notify("UserId does not match!");
                 return;
             }
 

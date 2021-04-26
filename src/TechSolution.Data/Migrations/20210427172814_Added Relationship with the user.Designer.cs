@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechSolution.Data.Context;
 
 namespace TechSolution.Data.Migrations
 {
     [DbContext(typeof(TechSolutionDbContext))]
-    partial class TechSolutionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210427172814_Added Relationship with the user")]
+    partial class AddedRelationshipwiththeuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -23,6 +23,9 @@ namespace TechSolution.API.ViewModels
 
         public double QuestionViewed { get; set; }
 
+        [Required]
+        public Guid UserId { get; set; }
+
         public IEnumerable<AnswerViewModel> Answers { get; set; }
 
         public IEnumerable<QuestionCommentViewModel> QuestionsComments { get; set; }

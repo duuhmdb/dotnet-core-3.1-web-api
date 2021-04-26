@@ -20,15 +20,18 @@ namespace TechSolution.API.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly TokenSettings _tokenSettings;
+        private readonly IUserService _userService;
 
         public UserController(INotificator notificator,
                               SignInManager<ApplicationUser> signInManager,
                               UserManager<ApplicationUser> userManager,
+                              IUserService userService,
                               IOptions<TokenSettings> options) : base(notificator)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenSettings = options.Value;
+            _userService = userService;
         }
 
         [HttpPost("new")]
@@ -50,7 +53,13 @@ namespace TechSolution.API.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                return CustomResponse(GenerateToken());
+
+                return CustomResponse(new
+                {
+                    AcessToken = GenerateToken(),
+                    ExpiresIn = DateTime.UtcNow.AddHours(_tokenSettings.ExpiresIn),
+                    UserId = _userService.GetUserId()
+                });
             }
             else
             {
@@ -69,7 +78,14 @@ namespace TechSolution.API.Controllers
             var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, false, false);
 
             if (result.Succeeded)
-                return CustomResponse(GenerateToken());
+            {
+                return CustomResponse(new
+                {
+                    AcessToken = GenerateToken(),
+                    ExpiresIn = DateTime.UtcNow.AddHours(_tokenSettings.ExpiresIn),
+                    UserId = _userService.GetUserId()
+                });
+            }
 
             return NotFound();
         }
