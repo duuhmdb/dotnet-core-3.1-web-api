@@ -40,8 +40,9 @@ namespace TechSolution.API
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddApiConfiguration();
-            services.AddIdentityConfiguration(Configuration);
             services.AddSwaggerConfig();
+            services.AddIdentityConfiguration(Configuration);
+            services.AddKisslogConfig(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
@@ -60,6 +61,8 @@ namespace TechSolution.API
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseKisslogConfig();
 
             app.UseEndpoints(endpoints =>
             {

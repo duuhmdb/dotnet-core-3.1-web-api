@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KissLog;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace TechSolution.API.Extensions
             _requestDelegate = requestDelegate;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, ILogger logger)
         {
             try
             {
@@ -22,14 +23,9 @@ namespace TechSolution.API.Extensions
             }
             catch (Exception ex)
             {
-                HandleException(context, ex);
+                logger.Critical(ex);
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
-        }
-
-        static void HandleException(HttpContext httpContext, Exception ex)
-        {
-            //Threat exception here
-            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         }
     }
 }

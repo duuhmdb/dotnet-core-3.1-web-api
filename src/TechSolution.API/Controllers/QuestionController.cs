@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,26 +13,29 @@ namespace TechSolution.API.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/questions")]
-    [Authorize]
+    
     public class QuestionController : MainController
     {
         private readonly IMapper _mapper;
         private readonly IQuestionRepository _questionRepository;
         private readonly IQuestionService _questionService;
-        
+        private readonly ILogger<QuestionController> _logger;
+
         public QuestionController(IMapper mapper,
                                   IQuestionRepository questionRepository,
                                   IQuestionService questionService,
-                                  INotificator notificator) : base(notificator)
+                                  INotificator notificator,
+                                  ILogger<QuestionController> logger) : base(notificator)
         {
             _questionRepository = questionRepository;
             _mapper = mapper;
             _questionService = questionService;
+            _logger = logger;
         }
 
         [HttpGet("all")]
         public async Task<IEnumerable<QuestionViewModel>> Get()
-        {
+        {   
             var questions = _mapper.Map<IEnumerable<Question>, IEnumerable<QuestionViewModel>>(await _questionRepository.GetAll());
 
             return questions;
