@@ -10,15 +10,15 @@ using TechSolution.Data.Context;
 namespace TechSolution.Data.Migrations
 {
     [DbContext(typeof(TechSolutionDbContext))]
-    [Migration("20210422010034_Initial")]
-    partial class Initial
+    [Migration("20210510154759_UpdateMigrationAfterDowngradeEntityPackages")]
+    partial class UpdateMigrationAfterDowngradeEntityPackages
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("ProductVersion", "3.1.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("TechSolution.Business.Models.Answer", b =>
@@ -35,7 +35,7 @@ namespace TechSolution.Data.Migrations
 
                     b.Property<string>("AnswerText")
                         .IsRequired()
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(1500)");
 
                     b.Property<int>("AnswerUpvotes")
                         .HasColumnType("int");
@@ -46,6 +46,9 @@ namespace TechSolution.Data.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -66,7 +69,7 @@ namespace TechSolution.Data.Migrations
 
                     b.Property<string>("AnswerCommentText")
                         .IsRequired()
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<int>("AnswerCommentUpvotes")
                         .HasColumnType("int");
@@ -78,6 +81,9 @@ namespace TechSolution.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("getdate()");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -102,14 +108,17 @@ namespace TechSolution.Data.Migrations
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(1500)");
 
                     b.Property<string>("QuestionTitle")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(150)");
 
-                    b.Property<int>("QuestionViewed")
+                    b.Property<double>("QuestionViewed")
                         .HasColumnType("float default(0)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -140,6 +149,9 @@ namespace TechSolution.Data.Migrations
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
@@ -153,8 +165,6 @@ namespace TechSolution.Data.Migrations
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .IsRequired();
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("TechSolution.Business.Models.AnswerComment", b =>
@@ -163,8 +173,6 @@ namespace TechSolution.Data.Migrations
                         .WithMany("AnswerComments")
                         .HasForeignKey("AnswerId")
                         .IsRequired();
-
-                    b.Navigation("Answer");
                 });
 
             modelBuilder.Entity("TechSolution.Business.Models.QuestionComment", b =>
@@ -173,20 +181,6 @@ namespace TechSolution.Data.Migrations
                         .WithMany("QuestionsComments")
                         .HasForeignKey("QuestionId")
                         .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("TechSolution.Business.Models.Answer", b =>
-                {
-                    b.Navigation("AnswerComments");
-                });
-
-            modelBuilder.Entity("TechSolution.Business.Models.Question", b =>
-                {
-                    b.Navigation("Answers");
-
-                    b.Navigation("QuestionsComments");
                 });
 #pragma warning restore 612, 618
         }

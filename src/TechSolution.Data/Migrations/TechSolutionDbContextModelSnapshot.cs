@@ -15,8 +15,8 @@ namespace TechSolution.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("ProductVersion", "3.1.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("TechSolution.Business.Models.Answer", b =>
@@ -163,8 +163,6 @@ namespace TechSolution.Data.Migrations
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .IsRequired();
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("TechSolution.Business.Models.AnswerComment", b =>
@@ -173,8 +171,6 @@ namespace TechSolution.Data.Migrations
                         .WithMany("AnswerComments")
                         .HasForeignKey("AnswerId")
                         .IsRequired();
-
-                    b.Navigation("Answer");
                 });
 
             modelBuilder.Entity("TechSolution.Business.Models.QuestionComment", b =>
@@ -183,20 +179,6 @@ namespace TechSolution.Data.Migrations
                         .WithMany("QuestionsComments")
                         .HasForeignKey("QuestionId")
                         .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("TechSolution.Business.Models.Answer", b =>
-                {
-                    b.Navigation("AnswerComments");
-                });
-
-            modelBuilder.Entity("TechSolution.Business.Models.Question", b =>
-                {
-                    b.Navigation("Answers");
-
-                    b.Navigation("QuestionsComments");
                 });
 #pragma warning restore 612, 618
         }

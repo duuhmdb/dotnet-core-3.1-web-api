@@ -30,7 +30,7 @@ namespace TechSolution.API
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
-        { 
+        {
             services.ResolveDependencies();
 
             services.AddDbContext<TechSolutionDbContext>(options =>
@@ -39,7 +39,7 @@ namespace TechSolution.API
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddApiConfiguration();
+            services.AddApiConfiguration(Configuration);
             services.AddSwaggerConfig();
             services.AddIdentityConfiguration(Configuration);
             services.AddKisslogConfig(Configuration);
@@ -64,10 +64,7 @@ namespace TechSolution.API
 
             app.UseKisslogConfig();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseApiConfiguration();
 
             app.UseSwaggerConfig(provider);
         }

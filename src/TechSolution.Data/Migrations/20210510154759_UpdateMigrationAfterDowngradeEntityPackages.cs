@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TechSolution.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class UpdateMigrationAfterDowngradeEntityPackages : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,12 +11,13 @@ namespace TechSolution.Data.Migrations
                 name: "Questions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    QuestionTitle = table.Column<string>(type: "varchar(50)", nullable: false),
-                    QuestionText = table.Column<string>(type: "varchar(250)", nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()"),
+                    UserId = table.Column<Guid>(nullable: false),
+                    QuestionTitle = table.Column<string>(type: "varchar(150)", nullable: false),
+                    QuestionText = table.Column<string>(type: "varchar(1500)", nullable: false),
                     QuestionTags = table.Column<string>(type: "varchar(20)", nullable: true),
-                    QuestionViewed = table.Column<int>(type: "float default(0)", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()")
+                    QuestionViewed = table.Column<double>(type: "float default(0)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,13 +28,14 @@ namespace TechSolution.Data.Migrations
                 name: "Answers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AnswerText = table.Column<string>(type: "varchar(250)", nullable: false),
-                    AcceptedAnswer = table.Column<bool>(type: "bit", nullable: false),
-                    AnswerUpvotes = table.Column<int>(type: "int", nullable: false),
-                    AnswerDownvotes = table.Column<int>(type: "int", nullable: false),
-                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()")
+                    Id = table.Column<Guid>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()"),
+                    UserId = table.Column<Guid>(nullable: false),
+                    AnswerText = table.Column<string>(type: "varchar(1500)", nullable: false),
+                    AcceptedAnswer = table.Column<bool>(nullable: false),
+                    AnswerUpvotes = table.Column<int>(nullable: false),
+                    AnswerDownvotes = table.Column<int>(nullable: false),
+                    QuestionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,12 +52,13 @@ namespace TechSolution.Data.Migrations
                 name: "QuestionComments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()"),
+                    UserId = table.Column<Guid>(nullable: false),
                     QuestionCommentsText = table.Column<string>(type: "varchar(200)", nullable: false),
-                    QuestionCommentsUpvotes = table.Column<int>(type: "int", nullable: false),
-                    QuestionCommentsDownvotes = table.Column<int>(type: "int", nullable: false),
-                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()")
+                    QuestionCommentsUpvotes = table.Column<int>(nullable: false),
+                    QuestionCommentsDownvotes = table.Column<int>(nullable: false),
+                    QuestionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,12 +75,13 @@ namespace TechSolution.Data.Migrations
                 name: "AnswersComments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AnswerCommentText = table.Column<string>(type: "varchar(200)", nullable: false),
-                    AnswerCommentUpvotes = table.Column<int>(type: "int", nullable: false),
-                    AnswerCommentDownvotes = table.Column<int>(type: "int", nullable: false),
-                    AnswerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()")
+                    Id = table.Column<Guid>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()"),
+                    UserId = table.Column<Guid>(nullable: false),
+                    AnswerCommentText = table.Column<string>(type: "varchar(1000)", nullable: false),
+                    AnswerCommentUpvotes = table.Column<int>(nullable: false),
+                    AnswerCommentDownvotes = table.Column<int>(nullable: false),
+                    AnswerId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
